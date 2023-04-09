@@ -1,11 +1,7 @@
 package com.backend.pdfs.services;
 
 import com.backend.pdfs.entities.PDF;
-import io.minio.GetObjectArgs;
-import io.minio.GetPresignedObjectUrlArgs;
-import io.minio.RemoveObjectArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
+import io.minio.*;
 import io.minio.errors.*;
 import io.minio.http.Method;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +19,16 @@ public class MinioService{
     @Autowired
     MinioClient minioClient;
 
+    public void createBucket(String bucketName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        boolean found =
+                minioClient.bucketExists(BucketExistsArgs.builder().bucket("my-bucketname").build());
+        if (found) {
+            System.out.println("my-bucketname exists");
+        } else {
+            System.out.println("my-bucketname does not exist");
+        }
+    }
+
     public void uploadFile(MultipartFile file, String bucketName, String fileName) throws MinioException {
         try {
             PutObjectArgs args = PutObjectArgs.builder()
@@ -37,16 +43,21 @@ public class MinioService{
         }
     }
 
-    public InputStream getPdf(String fileName, String bucketName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    public InputStream getPdf(String fileName, String bucketName) throws ServerException, InsufficientDataException,
+            ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException,
+            XmlParserException, InternalException
+    {
         GetObjectArgs args = GetObjectArgs.builder()
                 .bucket(bucketName)
                 .object(fileName)
                 .build();
-        InputStream inputStream = minioClient.getObject(args);
-        return inputStream;
+        return minioClient.getObject(args);
     }
 
-    public void deletePdf(String fileName, String bucketName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    public void deletePdf(String fileName, String bucketName) throws ServerException, InsufficientDataException,
+            ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException,
+            XmlParserException, InternalException
+    {
         RemoveObjectArgs args = RemoveObjectArgs.builder()
                 .bucket(bucketName)
                 .object(fileName)
@@ -55,11 +66,14 @@ public class MinioService{
         minioClient.removeObject(args);
     }
 
-    public void setUrls(ArrayList<PDF> pdfs) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    public void setUrls(ArrayList<PDF> pdfs) throws ServerException, InsufficientDataException, ErrorResponseException,
+            IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException,
+            InternalException
+    {
         for (PDF pdf : pdfs) {
             GetPresignedObjectUrlArgs args = GetPresignedObjectUrlArgs.builder()
                     .method(Method.GET)
-                    .bucket("pdfs")
+                    .bucket(pdf.getMinioBucket())
                     .object(pdf.getName())
                     .expiry(3600)
                     .build();

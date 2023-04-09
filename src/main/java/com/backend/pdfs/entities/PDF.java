@@ -1,84 +1,45 @@
 package com.backend.pdfs.entities;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Entity
-@Table(name="pdfs")
+@Data
+@Document(collection="pdfs")
 public class PDF {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private long id;
+    private String id;
     private String name;
 
-    private LocalDateTime dateTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+    private LocalDateTime uploadTime;
 
     private int numOfPages;
 
     private float size;
 
-    @Transient
+    private String minioBucket;
+
     private String url;
 
     public PDF(){}
 
-    public PDF(String name, LocalDateTime dateTime, int numOfPages, float size){
+    public PDF(String name, LocalDateTime uploadTime, int numOfPages, float size){
         this.name = name;
-        this.dateTime = dateTime;
+        this.uploadTime = uploadTime;
         this.numOfPages = numOfPages;
         this.size = size;
+        this.minioBucket = "pdfs";
     }
-    public PDF(long id, String name){
-        this.id=id;
-        this.name =name;
-    }
-
-    public void setId(long id){
-        this.id = id;
-    }
-
-    public long getId() {
-        return this.id;
-    }
-
-    public void setName(String name){
+    public PDF(String name, LocalDateTime uploadTime, int numOfPages, float size, String minioBucket){
         this.name = name;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setDateTime(LocalDateTime dateTime){
-        this.dateTime = dateTime;
-    }
-
-    public LocalDateTime getDateTime(){
-        return this.dateTime;
-    }
-
-    public void setNumOfPages(int number){
-        this.numOfPages = number;
-    }
-
-    public int getNumOfPages(){
-        return this.numOfPages;
-    }
-
-    public void setSize(float size){
+        this.uploadTime = uploadTime;
+        this.numOfPages = numOfPages;
         this.size = size;
-    }
-
-    public float getSize(){
-        return this.size;
-    }
-
-    public void setUrl(String url){ this.url = url; }
-
-    public String getUrl(){
-        return this.url;
+        this.minioBucket = minioBucket;
     }
 
 }

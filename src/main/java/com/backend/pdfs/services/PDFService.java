@@ -25,7 +25,15 @@ public class PDFService {
     @Autowired
     private PDFRepository pdfRepository;
 
-    public Optional<PDF> findById(long id) {
+    public boolean existsByName(String name){
+        return pdfRepository.existsByName(name);
+    }
+
+    public boolean existsById(String id){
+        return pdfRepository.existsById(id);
+    }
+
+    public Optional<PDF> findById(String id) {
         return pdfRepository.findById(id);
     }
 
@@ -33,11 +41,11 @@ public class PDFService {
         return (ArrayList<PDF>) pdfRepository.findAll();
     }
 
-    public void save(PDF pdf) {
-        pdfRepository.save(pdf);
+    public void insert(PDF pdf) {
+        pdfRepository.insert(pdf);
     }
 
-    public void deleteById(long id){
+    public void deleteById(String id){
         pdfRepository.deleteById(id);
     }
 
@@ -46,6 +54,7 @@ public class PDFService {
         InputStream inputStream = pdf.getInputStream();
         PdfDocument pdfDoc = new PdfDocument(new PdfReader(inputStream));
         StringBuilder stringBuilder = new StringBuilder();
+
         for (int i = 1; i <= pdfDoc.getNumberOfPages(); i++) {
             String textFromPage = PdfTextExtractor.getTextFromPage(pdfDoc.getPage(i));
             stringBuilder.append(textFromPage);
@@ -76,9 +85,8 @@ public class PDFService {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(image, "jpg", baos);
-        byte[] imageData = baos.toByteArray();
 
-        return imageData;
+        return baos.toByteArray();
     }
 
 }
