@@ -19,16 +19,6 @@ public class MinioService{
     @Autowired
     MinioClient minioClient;
 
-    public void createBucket(String bucketName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
-        boolean found =
-                minioClient.bucketExists(BucketExistsArgs.builder().bucket("my-bucketname").build());
-        if (found) {
-            System.out.println("my-bucketname exists");
-        } else {
-            System.out.println("my-bucketname does not exist");
-        }
-    }
-
     public void uploadFile(MultipartFile file, String bucketName, String fileName) throws MinioException {
         try {
             PutObjectArgs args = PutObjectArgs.builder()
