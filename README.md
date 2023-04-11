@@ -96,7 +96,9 @@ The API is secured with HTTP Basic Authentication. In order to use it you have t
 
 
 <br><br>
-### To create the pdfs_app.tar you can execute the following on the root directory:
+### If you do not have the pdfs_app.tar you can execute the following on the root directory:
 
 <code>mvn clean package</code><br>
-<code>docker build -t pdfs_app .</code>
+<code>docker build -t pdfs_app .</code><br>
+<code>docker-compose up</code>
+
