@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -63,7 +61,8 @@ public class SentencesService {
     public Map<String, Integer> getMostOccurringWords(String id) throws CustomException, IOException {
         // Load the stop words list
         List<String> stopWords = new ArrayList<>();
-        BufferedReader br = new BufferedReader(new FileReader("src/main/resources/static/stopwords.txt"));
+        InputStream inputStream = getClass().getResourceAsStream("/static/stopwords.txt");
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
         String line;
         while ((line = br.readLine()) != null) {
             stopWords.add(line);

@@ -61,15 +61,17 @@ public class MinioService{
             InternalException
     {
         for (PDF pdf : pdfs) {
-            GetPresignedObjectUrlArgs args = GetPresignedObjectUrlArgs.builder()
-                    .method(Method.GET)
-                    .bucket(pdf.getMinioBucket())
-                    .object(pdf.getName())
-                    .expiry(3600)
-                    .build();
 
-            String url = minioClient.getPresignedObjectUrl(args);
-            pdf.setUrl(url);
+//            GetPresignedObjectUrlArgs args = GetPresignedObjectUrlArgs.builder()
+//                    .method(Method.GET)
+//                    .bucket(pdf.getMinioBucket())
+//                    .object(pdf.getName())
+//                    .expiry(3600)
+//                    .build();
+//
+//            String url = minioClient.getPresignedObjectUrl(args);
+//            pdf.setUrl(url);
+            pdf.setUrl("http://localhost:8080/pdf/" + pdf.getId());
         }
     }
 }
