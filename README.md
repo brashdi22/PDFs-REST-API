@@ -1,5 +1,10 @@
 # PDFs-REST-API
 
+MVC design pattern is used to implement the REST API in Java spring boot. MongoDB and MinIO are used to store the data associated with the Java application. The program works as follows: when a pdf file is received in the controller, it gets parsed, then the metadata will be stored in a collection in Mongo, the sentences will be stored in another collection, while the actual pdf will be stored in MinIO. Then, depending on  the endpoint of the API that gets invoked, the Controller – and with the help of the Services in the Model – will fetch the needed data from these 3 places and a response will be sent to the client after processing the data.<br><br>
+
+You may notice some commented code in MinioService.java which is supposed to set temporary URLs for pdfs stored in MinIO. Since I am using Docker containers to host MinIO, MongoDB and the Java app, and because MinIO is a locally hosted storage, the URL returned from MinioClient cannot be run from the container running the app (the URL is relative to the MinIO container). As a temporary fix, I substitute the endpoint of getting the pdf (/pdf/:id) in the URL’s place. Note, the URL returned from MinioClient should work if you run the services on your machine instead of using Docker.<br>
+
+
 ### To run the app, run the following commands (assuming you have pdfs_app.tar, if you don't see the end of the README):
 <ol>
   <li><code>docker load -i pdfs_app.tar</code></li>
