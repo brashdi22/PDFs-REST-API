@@ -5,7 +5,7 @@ MVC design pattern is used to implement the REST API in Java spring boot. MongoD
 You may notice some commented code in MinioService.java which is supposed to set temporary URLs for pdfs stored in MinIO. Since I am using Docker containers to host MinIO, MongoDB and the Java app, and because MinIO is a locally hosted storage, the URL returned from MinioClient cannot be run from the container running the app (the URL is relative to the MinIO container). As a temporary fix, I substitute the endpoint of getting the pdf (/pdf/:id) in the URL’s place. Note, the URL returned from MinioClient should work if you run the services on your machine instead of using Docker.<br>
 
 
-### To run the app, run the following commands (assuming you have pdfs_app.tar, if you don't see the end of the README):
+### To run the app, run the following commands (assuming you have pdfs_app.tar and docker-compose.yaml, if you don't see the end of the README):
 <ol>
   <li><code>docker load -i pdfs_app.tar</code></li>
   <li><code>docker-compose up</code></li>
